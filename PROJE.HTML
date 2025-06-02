@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="proj.css">
+</head>
+<body>
+    <div class="main">
+        <div class="first">
+            <div class="search">
+                <input type="text", placeholder="Enter City">
+                <button id="bt1">Search</button>
+            </div>
+            <div class="waether">
+                <img src="images/rain.png" alt="" class="weather_icon">
+                <h1 class="temp">22°C</h1>
+                <h2 class="city"> New York</h2>
+            </div>
+            <div class="details">
+                <div class="col1">
+                    <img src="images/humidity.png" alt="">
+                    <p class="humanidy">50% humanidy</p>
+                </div>
+                <div class="col1">
+                    <img src="images/wind.png" alt="">
+                    <div>
+                    <p class="Wind">50%</p>
+                    <p>Wind Speed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const apikey = '8b8e376e72220b3b62ece6afedace54e';
+        const apiurl='https://api.openweathermap.org/data/2.5/weather?units=metric&q=';
+        const searchbox = document.querySelector(".search input");
+        const searchbtn= document.querySelector(".search button");
+        const weathericon= document.querySelector(".weather_icon");
+        async function checkweather(city) {
+            const reponse = await fetch(apiurl+ city + `&appid=${apikey}`);
+            var data = await reponse.json();
+            console.log(data)
+            document.querySelector(".city").innerHTML=data.name;
+            document.querySelector(".temp").innerHTML= Math.round(data.main.temp)+'*c';
+            document.querySelector('.humanidy').innerHTML=data.main.humidity+'%';
+            document.querySelector('.Wind').innerHTML=data.wind.speed+' Km/h';
+
+            if(data.weather[0].main=="Clouds")
+        {
+            weathericon.src="images/clouds.png"
+        }else if(data.weather[0].main=="Clear")
+        {
+            weathericon.src="images/clear.png"
+        }else if(data.weather[0].main=='Rain')
+        {
+            weathericon.src="images/rain.png"
+        }else if(data.weather[0].main=='Mist')
+        {
+            weathericon.src="images/mist.png"
+        }
+    }
+        searchbtn.addEventListener("click",()=>{
+            checkweather(searchbox.value);
+        })
+
+    </script>
+</body>
+</html>
